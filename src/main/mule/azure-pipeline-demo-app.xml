@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="azure-pipeline-demo-appFlow" doc:id="39423f0f-7e06-476c-a8a1-789e4238073e" >
+		<http:listener doc:name="HTTP: GET/test" doc:id="444e43ba-f965-4893-b80e-dd9f9b595771" path="/test" config-ref="HTTP_Listener_config"/>
+		<set-payload value='#["This message is from application deployed through Azure pipeline on CloudHub v1."]' doc:name="Set Payload" doc:id="18b00d79-2b37-4915-93e6-05738c4014f1" />
+		<ee:transform doc:name="Transform Message" doc:id="8ab5d324-4dbc-4497-b07a-aafc1cca03ca" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="dd836b62-abc9-4eb1-b4ac-c87ddf1b058f" message="#[payload]"/>
+	</flow>
+</mule>
